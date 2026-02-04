@@ -1,0 +1,17 @@
+{
+  "name": "tech-blog",
+  "version": "1.0.0",
+  "description": "Zhiyong Tech Blog - 3D可视化 | WebGL | Shader | 全栈开发",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "keywords": ["threejs", "webgl", "shader", "flask", "blog"],
+  "author": "Zhiyong",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

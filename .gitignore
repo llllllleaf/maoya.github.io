@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+*.log
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+
+# 大视频文件 - 超过 GitHub 100MB 限制
+docs/public/videos/*.mov
+docs/public/videos/3d-first-person-awards.mp4
+docs/public/videos/中源协和生命科技体验馆.mov
+docs/public/videos/等距空间.mov

@@ -1,0 +1,494 @@
+/* Lex Fridman 风格 - 简洁个人品牌页面 */
+
+:root {
+  /* 基础色调 */
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-soft: #f9fafb;
+  --vp-c-text-1: #1a1a1a;
+  --vp-c-text-2: #555555;
+  --vp-c-text-3: #888888;
+  --vp-c-brand: #2563eb;
+  --vp-c-brand-hover: #1d4ed8;
+
+  /* 隐藏默认 sidebar */
+  --vp-sidebar-width: 0px;
+}
+
+/* 全局样式 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 隐藏不需要的元素 */
+.VPNavBarTitle .title,
+.VPNavBarMenuGroup,
+.VPSidebar,
+.VPLocalNav,
+.aside,
+.VPDocAside {
+  display: none !important;
+}
+
+/* 导航栏简化 */
+.VPNav {
+  background: var(--vp-c-bg) !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.VPNavBar {
+  background: transparent !important;
+}
+
+.VPNavBarMenu .VPNavBarMenuLink {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  transition: color 0.2s;
+}
+
+.VPNavBarMenu .VPNavBarMenuLink:hover {
+  color: var(--vp-c-brand);
+}
+
+/* 隐藏 logo 和标题 */
+.VPNavBarTitle {
+  display: none !important;
+}
+
+/* 让导航链接靠左 */
+.VPNavBar .content-body {
+  justify-content: flex-start;
+}
+
+/* 主内容区域 */
+.VPContent {
+  padding-top: 64px !important;
+}
+
+.VPDoc {
+  padding: 0 !important;
+}
+
+.VPDoc .container {
+  max-width: 100% !important;
+}
+
+.VPDoc .content {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+/* 首页和联系页专用样式 - 覆盖 vp-doc 默认样式 */
+.home-page .profile-name,
+.home-page .section-title,
+.home-page .category-title,
+.home-page .article-title,
+.contact-page .contact-title {
+  border-bottom: none !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.home-page h1,
+.home-page h2,
+.home-page h3,
+.home-page h4,
+.contact-page h1 {
+  border: none !important;
+}
+
+/* 首页样式 */
+.home-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* 个人简介区域 */
+.profile-section {
+  margin-bottom: 72px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.profile-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.profile-info {
+  flex: 1;
+  padding-top: 8px;
+}
+
+.profile-name {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.profile-title {
+  font-size: 16px;
+  color: var(--vp-c-text-2);
+  margin: 0 0 28px 0;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.profile-interests {
+  margin-bottom: 24px;
+}
+
+.profile-interests p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--vp-c-text-2);
+  margin: 0 0 12px 0;
+}
+
+.profile-interests .label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+
+.profile-contact {
+  padding-top: 8px;
+}
+
+.contact-link {
+  font-size: 15px;
+  color: var(--vp-c-brand);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.contact-link:hover {
+  color: var(--vp-c-brand-hover);
+  text-decoration: underline;
+}
+
+/* 文章列表区域 */
+.articles-section {
+  margin-top: 48px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  margin: 0 0 32px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* 文章分类 */
+.article-category {
+  margin-bottom: 40px;
+}
+
+.category-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 16px 0;
+}
+
+/* 文章卡片 */
+.article-card {
+  display: block;
+  padding: 20px 0;
+  border-bottom: 1px solid #f3f4f6;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.article-card:hover {
+  padding-left: 8px;
+}
+
+.article-card:last-child {
+  border-bottom: none;
+}
+
+.article-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-brand);
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.article-card:hover .article-title {
+  color: var(--vp-c-brand-hover);
+}
+
+.article-summary {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+  margin: 0;
+}
+
+/* 联系页面 */
+.contact-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  text-align: center;
+}
+
+.contact-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  margin: 0 0 24px 0;
+}
+
+.contact-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--vp-c-text-2);
+  margin: 0 0 32px 0;
+}
+
+.contact-email {
+  font-size: 16px;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 14px 28px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: inline-block;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.contact-email:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.contact-email:active {
+  transform: scale(0.98);
+  background: #e5e7eb;
+}
+
+/* 文章详情页 */
+.vp-doc {
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  padding: 32px 24px 80px !important;
+}
+
+.vp-doc h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.vp-doc h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.vp-doc h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.vp-doc p {
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.vp-doc a {
+  color: var(--vp-c-brand);
+  text-decoration: none;
+}
+
+.vp-doc a:hover {
+  text-decoration: underline;
+}
+
+/* 代码块 */
+.vp-doc div[class*="language-"] {
+  border-radius: 8px;
+  margin: 24px 0;
+}
+
+/* 表格 */
+.vp-doc table {
+  width: 100%;
+  margin: 24px 0;
+}
+
+.vp-doc th {
+  background: var(--vp-c-bg-soft);
+  font-weight: 600;
+}
+
+.vp-doc th, .vp-doc td {
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+}
+
+/* 引用块 */
+.vp-doc blockquote {
+  border-left: 4px solid var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  padding: 16px 20px;
+  margin: 24px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.vp-doc blockquote p {
+  margin: 0;
+  color: var(--vp-c-text-2);
+}
+
+/* 页脚 */
+.VPFooter {
+  border-top: 1px solid #e5e7eb !important;
+  background: var(--vp-c-bg) !important;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .home-page {
+    padding: 32px 20px 60px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+  }
+
+  .profile-photo {
+    width: 160px;
+    height: 160px;
+  }
+
+  .profile-info {
+    padding-top: 0;
+  }
+
+  .profile-name {
+    font-size: 28px;
+  }
+
+  .profile-title {
+    font-size: 14px;
+    margin-bottom: 24px;
+    white-space: normal;
+  }
+
+  .profile-interests .label {
+    font-size: 11px;
+  }
+
+  .profile-interests p {
+    font-size: 14px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .article-title {
+    font-size: 16px;
+  }
+
+  .article-summary {
+    font-size: 14px;
+  }
+
+  .vp-doc {
+    padding: 24px 20px 60px !important;
+  }
+
+  .vp-doc h1 {
+    font-size: 26px;
+  }
+}
+
+/* 暗色模式 */
+.dark {
+  --vp-c-bg: #1a1a1a;
+  --vp-c-bg-soft: #242424;
+  --vp-c-text-1: #f5f5f5;
+  --vp-c-text-2: #a3a3a3;
+  --vp-c-text-3: #737373;
+}
+
+.dark .profile-photo {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.dark .section-title {
+  border-bottom-color: #333;
+}
+
+.dark .article-card {
+  border-bottom-color: #333;
+}
+
+.dark .vp-doc h2 {
+  border-bottom-color: #333;
+}
+
+.dark .vp-doc th {
+  background: var(--vp-c-bg-soft);
+}
+
+.dark .vp-doc th, .dark .vp-doc td {
+  border-color: #333;
+}
+
+.dark .contact-email {
+  background: #2a2a2a;
+  border-color: #404040;
+}
+
+.dark .contact-email:hover {
+  background: #333;
+  border-color: #505050;
+}
+
+.dark .contact-email:active {
+  background: #404040;
+}

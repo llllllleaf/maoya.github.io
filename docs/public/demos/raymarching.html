@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { margin: 0; padding: 0; }
+    body { background: #000; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+  <script>
+    // 光线行进着色器
+    const fragmentShader = `
+      precision highp float;
+      uniform float uTime;
+      uniform vec2 uResolution;
+
+      #define MAX_STEPS 100
+      #define MAX_DIST 100.0
+      #define SURF_DIST 0.001
+
+      // SDF 基础形状
+      float sphereSDF(vec3 p, float r) {
+        return length(p) - r;
+      }
+
+      float boxSDF(vec3 p, vec3 b) {
+        vec3 q = abs(p) - b;
+        return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+      }
+
+      float torusSDF(vec3 p, vec2 t) {
+        vec2 q = vec2(length(p.xz) - t.x, p.y);
+        return length(q) - t.y;
+      }
+
+      float planeSDF(vec3 p) {
+        return p.y + 1.0;
+      }
+
+      // 平滑并集
+      float opSmoothUnion(float d1, float d2, float k) {
+        float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
+        return mix(d2, d1, h) - k * h * (1.0 - h);
+      }
+
+      // 旋转矩阵
+      mat2 rot2D(float a) {
+        float s = sin(a), c = cos(a);
+        return mat2(c, -s, s, c);
+      }
+
+      // 场景 SDF
+      float sceneSDF(vec3 p) {
+        // 地面
+        float ground = planeSDF(p);
+
+        // 动态球体
+        vec3 spherePos = vec3(sin(uTime) * 1.5, 0.0, cos(uTime) * 1.5);
+        float sphere = sphereSDF(p - spherePos, 0.5);
+
+        // 旋转的立方体
+        vec3 boxP = p - vec3(0.0, 0.3, 0.0);
+        boxP.xz *= rot2D(uTime * 0.5);
+        boxP.xy *= rot2D(uTime * 0.3);
+        float box = boxSDF(boxP, vec3(0.4));
+
+        // 圆环
+        vec3 torusP = p - vec3(-1.5, 0.3, 0.0);
+        torusP.xy *= rot2D(uTime * 0.7);
+        float torus = torusSDF(torusP, vec2(0.4, 0.15));
+
+        // 第二个球体
+        vec3 sphere2Pos = vec3(1.5, 0.3 + sin(uTime * 1.5) * 0.3, 0.0);
+        float sphere2 = sphereSDF(p - sphere2Pos, 0.35);
+
+        // 组合
+        float shapes = opSmoothUnion(sphere, box, 0.3);
+        shapes = opSmoothUnion(shapes, torus, 0.2);
+        shapes = opSmoothUnion(shapes, sphere2, 0.2);
+
+        return min(ground, shapes);
+      }
+
+      // 光线行进
+      float rayMarch(vec3 ro, vec3 rd) {
+        float t = 0.0;
+        for (int i = 0; i < MAX_STEPS; i++) {
+          vec3 p = ro + rd * t;
+          float d = sceneSDF(p);
+          if (d < SURF_DIST) break;
+          if (t > MAX_DIST) break;
+          t += d;
+        }
+        return t;
+      }
+
+      // 计算法线
+      vec3 calcNormal(vec3 p) {
+        vec2 e = vec2(0.001, 0.0);
+        return normalize(vec3(
+          sceneSDF(p + e.xyy) - sceneSDF(p - e.xyy),
+          sceneSDF(p + e.yxy) - sceneSDF(p - e.yxy),
+          sceneSDF(p + e.yyx) - sceneSDF(p - e.yyx)
+        ));
+      }
+
+      // 软阴影
+      float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
+        float res = 1.0;
+        float t = mint;
+        for (int i = 0; i < 32; i++) {
+          float h = sceneSDF(ro + rd * t);
+          res = min(res, k * h / t);
+          t += clamp(h, 0.02, 0.1);
+          if (h < 0.001 || t > maxt) break;
+        }
+        return clamp(res, 0.0, 1.0);
+      }
+
+      // 环境光遮蔽
+      float ambientOcclusion(vec3 p, vec3 n) {
+        float occ = 0.0;
+        float sca = 1.0;
+        for (int i = 0; i < 5; i++) {
+          float h = 0.01 + 0.12 * float(i);
+          float d = sceneSDF(p + n * h);
+          occ += (h - d) * sca;
+          sca *= 0.95;
+        }
+        return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
+      }
+
+      // 光照
+      vec3 lighting(vec3 p, vec3 n, vec3 rd, vec3 lightPos) {
+        vec3 lightDir = normalize(lightPos - p);
+        vec3 viewDir = -rd;
+        vec3 halfDir = normalize(lightDir + viewDir);
+
+        // 漫反射
+        float diff = max(dot(n, lightDir), 0.0);
+
+        // 高光
+        float spec = pow(max(dot(n, halfDir), 0.0), 32.0);
+
+        // 菲涅尔
+        float fresnel = pow(1.0 - max(dot(n, viewDir), 0.0), 3.0);
+
+        // 阴影
+        float shadow = softShadow(p + n * 0.02, lightDir, 0.02, 10.0, 16.0);
+
+        // AO
+        float ao = ambientOcclusion(p, n);
+
+        // 环境光
+        float ambient = 0.1;
+
+        return vec3(ambient + (diff * shadow + spec * 0.5) * ao + fresnel * 0.1);
+      }
+
+      // 背景
+      vec3 background(vec3 rd) {
+        float t = 0.5 + 0.5 * rd.y;
+        return mix(vec3(0.1, 0.1, 0.15), vec3(0.3, 0.4, 0.6), t);
+      }
+
+      void main() {
+        vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution.xy) / uResolution.y;
+
+        // 相机
+        vec3 ro = vec3(0.0, 2.0, -5.0);
+        vec3 lookAt = vec3(0.0, 0.0, 0.0);
+
+        // 相机矩阵
+        vec3 forward = normalize(lookAt - ro);
+        vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), forward));
+        vec3 up = cross(forward, right);
+
+        vec3 rd = normalize(uv.x * right + uv.y * up + 1.5 * forward);
+
+        // 光线行进
+        float t = rayMarch(ro, rd);
+
+        vec3 color;
+        if (t < MAX_DIST) {
+          vec3 p = ro + rd * t;
+          vec3 n = calcNormal(p);
+
+          // 材质颜色
+          vec3 matColor;
+          if (p.y < -0.99) {
+            // 地面 - 棋盘格
+            float checker = mod(floor(p.x) + floor(p.z), 2.0);
+            matColor = mix(vec3(0.2), vec3(0.4), checker);
+          } else {
+            // 物体 - 基于法线的颜色
+            matColor = 0.5 + 0.5 * n;
+          }
+
+          // 光照
+          vec3 lightPos = vec3(3.0, 5.0, -3.0);
+          vec3 light = lighting(p, n, rd, lightPos);
+
+          color = matColor * light;
+
+          // 雾效
+          float fog = 1.0 - exp(-0.02 * t * t);
+          color = mix(color, background(rd), fog);
+        } else {
+          color = background(rd);
+        }
+
+        // 伽马校正
+        color = pow(color, vec3(0.4545));
+
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const vertexShader = `
+      void main() {
+        gl_Position = vec4(position, 1.0);
+      }
+    `;
+
+    // 场景初始化
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    document.body.appendChild(renderer.domElement);
+
+    // 全屏四边形
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector2(innerWidth, innerHeight) }
+      }
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    // 动画
+    function animate() {
+      requestAnimationFrame(animate);
+      material.uniforms.uTime.value += 0.016;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(innerWidth, innerHeight);
+      material.uniforms.uResolution.value.set(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
