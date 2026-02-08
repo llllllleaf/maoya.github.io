@@ -1,0 +1,1 @@
+import{_ as t,o as n,c as s,ag as e}from"./chunks/framework.CbQjVMS6.js";const b=JSON.parse('{"title":"AI 实践系列","description":"","frontmatter":{},"headers":[],"relativePath":"ai/index.md","filePath":"ai/index.md"}'),l={name:"ai/index.md"};function i(r,a,d,o,h,p){return n(),s("div",null,[...a[0]||(a[0]=[e("",17)])])}const g=t(l,[["render",i]]);export{b as __pageData,g as default};
