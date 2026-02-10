@@ -1,3 +1,7 @@
+---
+description: Three.js 入门教程，从零搭建完整的 3D 场景展示系统，掌握 Scene、Camera、Renderer 核心概念
+---
+
 # 从零搭建3D场景展示系统
 
 本文将带你从零开始，使用 Three.js 搭建一个完整的 3D 场景展示系统。

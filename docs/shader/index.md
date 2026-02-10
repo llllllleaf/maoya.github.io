@@ -1,3 +1,7 @@
+---
+description: WebGL Shader 编程进阶系列，涵盖 GLSL 图片特效、光线行进、海洋渲染和流体 Blob 效果
+---
+
 # Shader 进阶系列
 
 Shader（着色器）是 WebGL 的核心，掌握 Shader 编程可以实现各种炫酷的视觉效果。

@@ -1,3 +1,7 @@
+---
+description: 用 Flask 构建高性能 AI 推理服务，涵盖 TensorFlow 模型预加载、API 设计和并发优化
+---
+
 # Flask + TensorFlow AI 服务实战
 
 本文基于人脸识别项目，讲解如何用 Flask 构建高性能的 AI 推理服务，涵盖 **模型预加载**、**API 设计**、**图像处理**、**并发优化** 等核心实践。

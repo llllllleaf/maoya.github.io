@@ -1,3 +1,7 @@
+---
+description: 用 Python + dlib 构建人脸识别 API，涵盖人脸检测、68关键点定位和特征比对
+---
+
 # Python+dlib人脸识别API
 
 本文讲解如何用 Python + dlib 构建人脸识别 API。

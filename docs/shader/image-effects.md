@@ -1,3 +1,7 @@
+---
+description: GLSL Shader 入门教程，实现波浪扭曲、像素化、灰度、色相偏移、RGB 分离 6 种图片特效
+---
+
 # Shader入门：图片特效实现
 
 本文带你用 GLSL 实现图片特效，掌握 Shader 编程的基础。

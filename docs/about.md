@@ -1,3 +1,7 @@
+---
+description: 关于 Mao Ya — 3D可视化工程师、全栈开发者、PMP项目经理，擅长 Three.js、WebGL、Flask、AI/ML
+---
+
 # 关于我
 
 ## 技术栈

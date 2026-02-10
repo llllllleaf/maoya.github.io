@@ -7,11 +7,18 @@
     "build": "vitepress build docs",
     "preview": "vitepress preview docs"
   },
-  "keywords": ["threejs", "webgl", "shader", "flask", "blog"],
+  "keywords": [
+    "threejs",
+    "webgl",
+    "shader",
+    "flask",
+    "blog"
+  ],
   "author": "Zhiyong",
   "license": "MIT",
   "type": "module",
   "devDependencies": {
+    "feed": "^5.2.0",
     "vitepress": "^1.6.4"
   }
 }

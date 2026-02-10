@@ -1,3 +1,7 @@
+---
+description: Three.js 中 GLTF 模型加载与 DRACO 压缩优化详解，大幅减少 3D 模型文件体积
+---
+
 # GLTF模型加载与DRACO压缩优化
 
 GLTF 是 WebGL 领域的「JPEG」，是目前最主流的 3D 模型格式。本文介绍如何加载 GLTF 模型，并使用 DRACO 压缩大幅减少文件体积。

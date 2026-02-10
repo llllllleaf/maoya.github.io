@@ -1,3 +1,7 @@
+---
+description: Flask 全栈开发系列，从博客系统架构到 AI 推理服务，涵盖工厂模式、蓝图和 TensorFlow 集成
+---
+
 # Flask 全栈系列
 
 本系列涵盖 Flask Web 开发的最佳实践，从博客系统到 AI 服务。
