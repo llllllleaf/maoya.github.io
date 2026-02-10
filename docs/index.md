@@ -40,6 +40,11 @@ head:
   <p class="article-summary">7 天从零构建类 GPT 模型的深度复盘，拆解分词、嵌入、注意力机制、Transformer 架构到文本生成的完整链路。</p>
 </a>
 
+<a href="./ai/state-of-ai-2026-podcast" class="article-card">
+  <h4 class="article-title">4.5 小时 AI 深度对谈：我从 Lex Fridman #490 中学到了什么</h4>
+  <p class="article-summary">Lex Fridman × Nathan Lambert × Sebastian Raschka，从 Scaling Laws 到 RLHF，从 MoE 架构到开源闭源之争，一期播客听三遍的认知升级。</p>
+</a>
+
 <a href="./growth/claude-certification-journey" class="article-card">
   <h4 class="article-title">获得 Anthropic 官方 Claude 认证：AI 时代的技能进化</h4>
   <p class="article-summary">完成 Claude 101 和 Claude Code in Action 官方认证课程，分享 AI 工具学习心得与编程场景的深度实践。</p>
